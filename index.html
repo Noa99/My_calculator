@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Report5</title>
+		<style>
+			/*CSSのエリア*/
+      h1{
+        text-align: center;
+      }
+      .calculator{     
+        text-align: center;
+        padding: 10px;
+        margin: auto;
+        width: 50%;
+        border:5px solid gray;
+      }
+
+      .calculator p{
+        display: inline-block;
+      }  
+      
+			#result{
+				width:200px;
+				padding:3px;
+				font-size:16px;
+				border:1px solid gray;
+				text-align:center;
+			}
+
+      .sign img{
+        width: 50px;
+        padding: 7px;
+        margin: 10px 3px 10px 3px;
+      }   
+      .sign img:hover{
+        opacity: 0.5;
+      }
+
+      #sign{
+        font-size: 50px;
+        text-align: center;
+      }
+
+      .ideas{
+        margin: 30px 50px 10px 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      .ideas h2{
+        margin-bottom: 10px;
+        /* text-align: center; */
+      }
+		</style>
+	</head>
+	<body>
+		<!-- コンテンツのエリア -->
+    <h1>My calculator</h1>
+    <div id = "calculator" class="calculator">       
+      <input type="text" id="input1">
+      <div class = "sign">
+        <img id='+' src="+.png" alt="足し算イラスト" onclick="cal('+')">
+        <img id='-' src="-.png" alt="引き算イラスト" onclick="cal('-')">
+        <img id='×' src="×.png" alt="かけ算イラスト" onclick="cal('×')">
+        <img id='÷' src="÷.png" alt="割り算イラスト" onclick="cal('÷')">
+      </div>
+      <div>
+        <input type="text" id="input2">
+        <button id = "runButton" onclick="run()">=</button>
+      </div>
+      <div><p id="result">結果はここに表示されます</p></div>
+      
+      <div><button type="button" onclick="resetform()">クリア</button></div>
+    </div>
+    <div class="ideas">
+      
+      <h2>工夫したこと</h2>
+      <ul>
+        <li>四則演算のボタンに画像を入れてボタンにした</li>
+        <li>四則演算のボタンを押すと自動的にカーソルが2つ目の入力画面に行くようにした</li>
+        <li>正しい数値が入力されなかった場合、赤字でエラーメッセージと枠が赤くなるようにした</li>
+        <li>クリアボタンを設置してリセットできるようにした</li>
+        <li>＝ボタンを押したら計算が始まるようにした</li>
+        <li>2つ目の入力ボックスを入力してenter keyを押したら計算が始まる機能をつけた</li>
+        <li>四則演算のボタンを押したら何が選択されているか分かるように背景色が変わるように工夫した</li>
+        <li>四則演算の背景色を変えた時他のボタンをクリックすると、1つ以上背景の色が変わってしまい<br>どのようにすれば1つしか選択できない設定になるのか苦戦しました。<br>結果、一旦背景色をリセットするファンクションを作り解決しました</li>
+      </ul>
+      
+    </div>    
+		<script>
+			//JavaScriptのエリア 
+      var input1 = document.getElementById("input1");      
+      var input2 = document.getElementById("input2");      
+      var result = document.getElementById("result");
+      var sign = document.getElementById("sign");
+      
+      var kigou;
+      var btn;     
+
+      input2.addEventListener("keyup", function(event) {
+          if (event.keyCode === 13) {
+              run();
+          }
+      });      
+
+      function cal(btn){         
+        kigou = btn;        
+        clearBackgroundColor();
+        document.getElementById(kigou).style.backgroundColor ="grey";        
+        input2.focus();
+      }
+
+      function clearBackgroundColor(){
+        document.getElementById('+').style.backgroundColor ="";  
+        document.getElementById('-').style.backgroundColor ="";  
+        document.getElementById('×').style.backgroundColor ="";  
+        document.getElementById('÷').style.backgroundColor ="";  
+      }
+
+      function run(){    
+        var num1 = parseFloat(input1.value);  
+        var num2 = parseFloat(input2.value);  
+        var mathResult;
+        
+        switch(kigou){
+          case "+":
+            mathResult = num1 + num2;
+            break;            
+        
+          case "-":
+            mathResult = num1 - num2;
+            break;            
+        
+          case "×":
+            mathResult = num1 * num2;
+            break;          
+        
+          case "÷":
+            mathResult = num1 / num2;
+            break;   
+                  
+          default: 
+            mathResult = "";
+        } 
+        
+        if(mathResult === "" || isNaN(mathResult)){
+          document.getElementById("calculator").style.borderColor = "red";
+          result.style.color = "red";
+          result.innerHTML = "値を入力してください";
+        }else{
+          document.getElementById("calculator").style.borderColor = "black";
+          result.style.color = "black";
+          result.innerHTML = mathResult;    
+        }    
+      } 
+      
+      function resetform(){   
+        input1.value = input2.value = "";           
+        result.style.color = "black";
+        result.innerHTML = "結果はここに表示されます";
+        if(kigou != null){
+          document.getElementById(kigou).style.backgroundColor ="";
+        }
+        document.getElementById("calculator").style.borderColor = "";
+      }
+
+
+        
+
+			// function btnPlus(){				
+			// 	// var input1 = document.getElementById("input1");
+			// 	// var input2 = document.getElementById("input2");
+			// 	// var resultBox = document.getElementById("box1");
+			// 	// var box2 = document.getElementById("box2");
+			// 	var result= parseFloat(input1.value) + parseFloat(input2.value);
+			// 	resultBox.innerHTML = result;
+			// 	setColor(result);           
+			// }
+
+			// function btnMinus(){
+			// 	// var input1 = document.getElementById("input1");
+			// 	// var input2 = document.getElementById("input2");
+			// 	// var resultBox = document.getElementById("box1");
+			// 	var result= parseFloat(input1.value) - parseFloat(input2.value);
+			// 	resultBox.innerHTML = result;
+        
+			// }
+
+			// function btnMultiply(){
+			// 	// var input1 = document.getElementById("input1");
+			// 	// var input2 = document.getElementById("input2");
+			// 	// var resultBox = document.getElementById("box1");
+			// 	var result= parseFloat(input1.value) * parseFloat(input2.value);
+			// 	resultBox.innerHTML = result;
+			// }
+
+			// function btnDivide(){
+			// 	// var input1 = document.getElementById("input1");
+			// 	// var input2 = document.getElementById("input2");
+			// 	// var resultBox = document.getElementById("box1");
+			// 	var result= parseFloat(input1.value) / parseFloat(input2.value);
+			// 	resultBox.innerHTML = result;
+			// }
+      // function setColor(result){
+      //   if(100<result){
+      //     resultBox.style.color = "red";
+			// 	box2.innerHTML="大きいです";
+			// 	} else{
+      //     resultBox.style.color = "black";
+      //     box2.innerHTML="";
+      //   }
+      // }
+
+
+		</script>
+	</body>
+</html>
